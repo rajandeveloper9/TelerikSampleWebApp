@@ -1,0 +1,15 @@
+D:\AnkurOfficeWork\Demo\bin\Demo.dll.config
+D:\AnkurOfficeWork\Demo\bin\Demo.dll
+D:\AnkurOfficeWork\Demo\bin\Demo.pdb
+D:\AnkurOfficeWork\Demo\obj\Debug\Demo.dll
+D:\AnkurOfficeWork\Demo\obj\Debug\Demo.pdb
+D:\AnkurOfficeWork\Demo\obj\Debug\Demo.csprojResolveAssemblyReference.cache
+C:\Users\Administrator\Downloads\Telerik Code\From Ankur\Demo\Demo\bin\Demo.dll.config
+C:\Users\Administrator\Downloads\Telerik Code\From Ankur\Demo\Demo\bin\Demo.dll
+C:\Users\Administrator\Downloads\Telerik Code\From Ankur\Demo\Demo\bin\Demo.pdb
+C:\Users\Administrator\Downloads\Telerik Code\From Ankur\Demo\Demo\bin\EnvDTE.dll
+C:\Users\Administrator\Downloads\Telerik Code\From Ankur\Demo\Demo\bin\stdole.dll
+C:\Users\Administrator\Downloads\Telerik Code\From Ankur\Demo\Demo\bin\EnvDTE.xml
+C:\Users\Administrator\Downloads\Telerik Code\From Ankur\Demo\Demo\obj\Debug\Demo.csprojResolveAssemblyReference.cache
+C:\Users\Administrator\Downloads\Telerik Code\From Ankur\Demo\Demo\obj\Debug\Demo.dll
+C:\Users\Administrator\Downloads\Telerik Code\From Ankur\Demo\Demo\obj\Debug\Demo.pdb

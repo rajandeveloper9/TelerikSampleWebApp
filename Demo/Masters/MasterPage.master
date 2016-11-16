@@ -1,0 +1,1246 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPages_MasterPage" %>
+
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
+<%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta charset="utf-8" />
+    <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+    <title>UN Women Contacts Database</title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="../css/normalize.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/custom.css" />
+    <link href="../fonts/css/font-awesome.css" rel="stylesheet" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <telerik:RadCodeBlock ID="RadCodeBlock1" runat="server">
+        <script type="text/javascript" language="javascript">
+            function btn_save_click() {
+                var Rw_save = $find("<%=Rw_save.ClientID %>");
+                document.getElementById("<%=SaveOption.ClientID %>").checked = true;
+                document.getElementById("<%=chk_public.ClientID %>").checked = false;
+                $find("<%= txtsaveSearch.ClientID %>").set_value("");
+                saveEnable(1);
+                Rw_save.show();
+                return false;
+            }
+
+            function saveEnable(value) {
+                var objState1 = $find("<%= ddlSavedSearch.ClientID %>");
+                var objStatet = $find("<%= txtsaveSearch.ClientID %>");
+                //clearMsg();
+                if (value == 1) {
+                    objState1.disable();
+                    objStatet.enable();
+                }
+                else {
+                    objStatet.disable();
+                    objStatet.clear();
+                    objState1.enable();
+                }
+            }
+            function btn_cancel_search_click() {
+                var Rw_save = $find("<%=Rw_save.ClientID %>");
+                Rw_save.Close();
+                return false;
+            }
+            function Validate() {
+                var ddlSavedSearch = $find("<%= ddlSavedSearch.ClientID %>");
+                var txtsaveSearch = $find("<%= txtsaveSearch.ClientID %>");
+                var lblmssgBefore = document.getElementById("<%=lblmssgBefore.ClientID %>");
+                var count = 0
+                if (document.getElementById("<%=SaveOption1.ClientID %>").checked) {
+                    if (ddlSavedSearch.get_value() == "")
+                        count = 1;
+                }
+                else {
+                    if (txtsaveSearch.get_value() == "")
+                        count = 2;
+                }
+                if (count == 2) {
+                    lblmssgBefore.innerHTML = "Please enter search name";
+                    return false;
+                }
+                else if (count == 1) {
+                    lblmssgBefore.innerHTML = "Please select from existing search";
+                    return false;
+                }
+
+
+            }
+
+            function BtnSendEmail_Validate() {
+                $("#pageloaddiv").show();
+
+
+                var txt = $('#txt_sender_password');
+                var txtSubject = $('#txt_subject');
+
+
+
+                var editor = $find("<%= RadEditorPIPIP1.ClientID %>"); //get a reference to RadEditor client object
+                // Configure the needed options for the stripping behavior
+                var options = {
+                    trimText: true, // Removes all leading and trailing white-space characters. 
+                    removeMultipleSpaces: true //Merges all white-space characters. 
+                }
+
+                var txtBody = editor.get_text(options);
+
+
+
+
+                var RW_Alert = $find("<%=RW_Alert.ClientID %>");
+                var lblmssgBefore1 = document.getElementById("<%=lblmssgBefore1.ClientID %>");
+
+                if (document.getElementById("<%=ChkSender.ClientID %>").checked) {
+                    if (txt.val() == null || txt.val() == '') {
+                        lblmssgBefore1.innerHTML = "Please enter  password";
+                        RW_Alert.show();
+                        $("#pageloaddiv").hide();
+                        return false;
+                    }
+                }
+
+                if (txtSubject.val() == null || txtSubject.val() == '') {
+                    lblmssgBefore1.innerHTML = "Please enter  subject";
+                    RW_Alert.show();
+                    $("#pageloaddiv").hide();
+                    return false;
+                }
+
+                $("#pageloaddiv").show();
+
+
+            }
+
+            function closeRW_Alert(sender, eventArgs) {
+                var RW_Alert = $find("<%=RW_Alert.ClientID %>");
+                RW_Alert.close();
+                RW_Alert.set_visibleOnPageLoad(false);
+                eventArgs.set_cancel(true);
+            }
+
+            function btn_OK_click() {
+                var RW_Alert = $find("<%=RW_Alert.ClientID %>");
+                RW_Alert.close();
+                return false;
+            }
+            function onlyNumbers(event) {
+                var charCode = (event.which) ? event.which : event.keyCode
+                if (charCode > 31 && (charCode < 48 || charCode > 57))
+                    return false;
+
+                return true;
+
+            }
+           
+            function imgprint(grid, view) {
+                var count = 0;
+                var Ids = "";
+                if (view == "TableView") {
+                    var masterTable = $find(grid).get_masterTableView();
+                    var finalcount = masterTable.get_dataItems().length;
+                    for (var i = 0; i < masterTable.get_dataItems().length; i++) {
+                        if (masterTable.get_dataItems()[i].findElement('Check').checked) {
+                            count++;
+                            if (Ids == "")
+                                Ids = masterTable.get_dataItems()[i].getDataKeyValue("ID");
+                            else
+                                Ids += "," + masterTable.get_dataItems()[i].getDataKeyValue("ID");
+                        }
+                    }
+                }
+                else {
+                    var masterTable = $find(grid).get_masterTableView();
+                    var finalcount = masterTable.get_dataItems().length;
+                    for (var i = 0; i < masterTable.get_dataItems().length; i++) {
+                        if (masterTable.get_dataItems()[i].findElement('chkSel').checked) {
+                            count++;
+                            if (Ids == "")
+                                Ids = masterTable.get_dataItems()[i].getDataKeyValue("ID");
+                            else
+                                Ids += "," + masterTable.get_dataItems()[i].getDataKeyValue("ID");
+                        }
+                    }
+                }
+                //alert(count)
+                var Radwindow3 = $find("<%=Radwindow3.ClientID %>");
+                Radwindow3.newattribute = Ids.replace("on,", "");
+                Radwindow3.setUrl("PrintLabels.aspx?CT=" + count);
+                Radwindow3.show();
+                return false;
+            }
+            function OnClientClose(oWnd) {
+                if (oWnd.arguments[0].toString() == "Save") {
+                    if (parseInt(oWnd.arguments[1].toString()) > 0)
+                        window.location.reload();
+                }
+                else if (oWnd.arguments[0].toString() == "Login")
+                    window.location.href = "../Login.aspx";
+            }
+
+
+
+
+
+        </script>
+    </telerik:RadCodeBlock>
+    <style type="text/css">
+        .input-group .form-control:focus
+        {
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
+        .mysearch.button > a input
+        {
+            background: #E4701E none repeat scroll 0 0;
+            color: #fff;
+            padding: 5px;
+            width: 100px;
+            font-size: small;
+            text-align: center;
+            cursor: pointer;
+        }
+        .mysearch.button > a input:hover
+        {
+            background: #0081B8 none repeat scroll 0 0;
+        }
+        .login.button > a input
+        {
+            background: #E4701E none repeat scroll 0 0;
+            color: #fff;
+            padding: 5px;
+            width: 100px;
+            font-size: small;
+            text-align: center;
+            cursor: pointer;
+        }
+        .login.button > a input:hover
+        {
+            background: #0081B8 none repeat scroll 0 0;
+        }
+        .RadWindow_Default
+        {
+            background-color: transparent !important;
+            border-color: transparent !important;
+        }
+        .RadWindow.rwShadow
+        {
+            box-shadow: none !important;
+        }
+         .RadWindow_Default.rwLoading .rwExternalContent
+        {
+            background-image: url('Images/Wait_Animation.gif') !important;
+        }
+        .RadWindow_Sunset .rwCorner .rwTopLeft, .RadWindow_Sunset .rwTitlebar, .RadWindow_Sunset .rwCorner .rwTopRight, .RadWindow_Sunset .rwIcon, .RadWindow_Sunset table .rwTopLeft, .RadWindow_Sunset table .rwTopRight, .RadWindow_Sunset table .rwFooterLeft, .RadWindow_Sunset table .rwFooterRight, .RadWindow_Sunset table .rwFooterCenter, .RadWindow_Sunset table .rwBodyLeft, .RadWindow_Sunset table .rwBodyRight, .RadWindow_Sunset table .rwTitlebar, .RadWindow_Sunset table .rwTopResize, .RadWindow_Sunset table .rwStatusbar, .RadWindow_Sunset table .rwStatusbar .rwLoading
+        {
+            visibility: hidden !important;
+        }
+          .RadWindow_Default .rwTopLeft, .RadWindow_Default .rwTopRight, .RadWindow_Default .rwTitlebar, .RadWindow_Default .rwFooterLeft, .RadWindow_Default .rwFooterRight, .RadWindow_Default .rwFooterCenter, .RadWindow_Default .rwTopResize, .RadWindow_Default .rwStatusbar div, .RadWindow_Default .rwStatusbar, .RadWindow_Default .rwPopupButton, .RadWindow_Default .rwPopupButton span, .RadWindow_Default.rwMinimizedWindow .rwCorner
+        {
+            background-image: none !important;
+        }
+        
+        .RadWindow_Default .rwBodyLeft, .RadWindow_Default .rwBodyRight, .RadWindow_Default .rwStatusbarRow .rwCorner
+        {
+            background-image: none !important;
+        }
+           .TelerikModalOverlay
+        {
+            filter: alpha(opacity=40) !important; /*for IE 5.5+*/
+            opacity: .40 !important; /*for FF 2x, Opera 9x*/
+            -moz-opacity: .40 !important; /*for FF 1x*/
+            background-color: Black !important;
+            position: fixed !important;
+        }
+    </style>
+    <style type="text/css">
+        #pageloaddiv
+        {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 1051;
+            background: url('../images/Wait_Animation.gif') no-repeat center center;
+        }
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <asp:ScriptManager ID="ScriptManager1" runat="server">
+    </asp:ScriptManager>
+    <%-- <telerik:RadScriptManager ID="RadScriptManager1" runat="server">
+    </telerik:RadScriptManager>
+
+
+    <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Default"
+        Transparency="40">
+        <asp:Image ID="ImageLoading" runat="server" ImageUrl="~/images/UNWOMEN_IconInfo.png">
+        </asp:Image>
+    </telerik:RadAjaxLoadingPanel>
+    <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
+        <AjaxSettings>
+            <telerik:AjaxSetting AjaxControlID="pnlpoup">
+                <UpdatedControls>
+                    <telerik:AjaxUpdatedControl ControlID="pnlpoup" LoadingPanelID="RadAjaxLoadingPanel1">
+                    </telerik:AjaxUpdatedControl>
+                </UpdatedControls>
+            </telerik:AjaxSetting>
+        </AjaxSettings>
+    </telerik:RadAjaxManager>--%>
+    <div id="pageloaddiv" style="display: none">
+    </div>
+    <asp:Label runat="server" ID="lbltext"></asp:Label>
+    <telerik:RadWindow ID="RW_Alert" runat="server" EnableShadow="True" Height="200px"
+        Modal="True" EnableTheming="true" EnableViewState="false" Behaviors="None" VisibleStatusbar="False"
+        VisibleTitlebar="false" Width="400px">
+        <ContentTemplate>
+            <table border="0" cellpadding="0" cellspacing="0" style="height: 85%" width="100%">
+                <tr style="height: 12%; font-size: 13px">
+                    <td>
+                        <table cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                                <td align="left" style="padding-left: 10px; padding-top: 10px">
+                                    <asp:Image ID="Image1" runat="server" ImageUrl="~/images/UNWOMEN_IconInfo.png" />
+                                    &nbsp;
+                                </td>
+                                <td align="right" style="padding-right: 3px; padding-top: 4px" valign="top">
+                                    <telerik:RadButton ID="RadButton3" runat="server" Height="12px" Image-ImageUrl="~/images/UNWOMEN_IconClosePopUp.png"
+                                        OnClientClicking="closeRW_Alert" Width="12px">
+                                    </telerik:RadButton>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="height: 32px; font-size: 13px">
+                    <td align="center" valign="top">
+                        <asp:Label ID="lblmssgBefore1" Font-Names="calibri" Font-Size="Medium" runat="server"
+                            Text=""></asp:Label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="height: 42%;" align="center" valign="top">
+                        <table width="50%" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td align="center" style="padding-right: 10px; width: 100%">
+                                    <p class="login button text-center">
+                                        <a href="#">
+                                            <asp:Button ID="btn_OK" Text="OK" Width="100px" runat="server" ToolTip="OK" OnClientClick="return btn_OK_click();" />
+                                        </a>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </ContentTemplate>
+    </telerik:RadWindow>
+    <telerik:RadWindow ID="Rw_save" runat="server" EnableShadow="True" Height="300px"
+        Modal="True" VisibleStatusbar="False" VisibleTitlebar="false" Width="500px" VisibleOnPageLoad="false">
+        <ContentTemplate>
+            <div id="Div1" runat="server">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border: 0px solid #cccccc;
+                    height: 99%;">
+                    <tr style="height: 12%; font-size: 13px">
+                        <td>
+                            <table cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td align="left" style="padding-left: 10px; padding-top: 10px">
+                                    </td>
+                                    <td align="right" style="padding-right: 3px; padding-top: 4px" valign="top">
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" valign="top">
+                            <asp:Panel ID="Panel1" runat="server">
+                                <table cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td colspan="2" align="left" style="padding-bottom: 5px;">
+                                            <asp:Label ID="Label1" runat="server" Font-Names="calibri" Font-Size="Small" ForeColor="Black"
+                                                Text="Save as a new search named as :"></asp:Label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <%--  <td style="padding-right: 5px;">
+                                                <input type="radio" id="Radio1" checked="true" name="saveoptionname" 
+                                                    runat="server" />
+                                            </td>--%>
+                                        <td style="padding-right: 5px;">
+                                            <input type="radio" id="SaveOption" checked="true" name="saveoptionname" onclick="saveEnable(1)"
+                                                runat="server" />
+                                        </td>
+                                        <td>
+                                            <telerik:RadTextBox ID="txtsaveSearch" runat="server" Width="350px" Height="25px"
+                                                Font-Names="Calibri" Font-Size="Small">
+                                            </telerik:RadTextBox>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="padding-bottom: 05px; padding-top: 15px;" align="left">
+                                            <asp:Label ID="Label2" runat="server" Font-Names="calibri" Font-Size="Small" ForeColor="Black"
+                                                Text="Or replace an existing search by selecting one from the list :"></asp:Label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-right: 5px;">
+                                            <input type="radio" id="SaveOption1" name="saveoptionname" runat="server" onclick="saveEnable(0)" />
+                                        </td>
+                                        <td>
+                                            <telerik:RadComboBox ID="ddlSavedSearch" Width="350px" runat="server" Enabled="false">
+                                            </telerik:RadComboBox>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <%--  <td style="padding-right: 5px; padding-top: 15px;">
+                                                <asp:CheckBox ID="CheckBox5" runat="server" ToolTip="Mark as Public" />
+                                            </td>--%>
+                                        <td style="padding-right: 5px; padding-top: 15px;">
+                                            <asp:CheckBox ID="chk_public" runat="server" ToolTip="Mark as Public" />
+                                        </td>
+                                        <td style="padding-top: 15px;">
+                                            Mark as Public
+                                        </td>
+                                    </tr>
+                                </table>
+                            </asp:Panel>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 50px; padding-bottom: 10px; padding-top: 10px; height: 20px">
+                            <asp:Label ID="lblmssgBefore" Font-Names="calibri" Font-Size="Medium" runat="server"
+                                ForeColor="Red" Text=""></asp:Label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height: 50px; padding-left: 70px;" valign="middle">
+                            <table cellpadding="0" cellspacing="0" border="0" width="350px">
+                                <tr>
+                                    <td align="right" style="width: 80%;">
+                                        <p class="mysearch button text-center">
+                                            <%-- <a href="#">
+                                                    <asp:Button ID="btn_savesearch" Text="Save" Width="100px" runat="server" ToolTip="Save search" 
+                                                         />
+                                                </a>--%>
+                                            <a href="#">
+                                                <asp:Button ID="btn_savesearch" Text="Save" Width="100px" runat="server" ToolTip="Save search"
+                                                    OnClick="btn_savesearch_Click" OnClientClick="return Validate();" />
+                                            </a>
+                                        </p>
+                                    </td>
+                                    <td align="right" style="width: 20%; padding-left: 10px">
+                                        <p class="mysearch button text-center">
+                                            <%--<a href="#">
+                                                    <asp:Button ID="btn_cancelsearch" Text="Cancel" Width="100px" runat="server" ToolTip="Cancel"  />
+                                                </a>--%>
+                                            <a href="#">
+                                                <asp:Button ID="btn_cancelsearch" Text="Cancel" Width="100px" runat="server" ToolTip="Cancel"
+                                                    OnClientClick="return btn_cancel_search_click();" />
+                                            </a>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </ContentTemplate>
+    </telerik:RadWindow>
+        <telerik:RadWindow ID="Radwindow3" runat="server" Width="900px" Height="540px" Modal="True"
+                    OnClientClose="OnClientClose" ShowContentDuringLoad="false" ReloadOnShow="false"
+                    EnableTheming="false" Behaviors="Move" VisibleStatusbar="false" VisibleTitlebar="false"
+                    Opacity="100" EnableShadow="true">
+                </telerik:RadWindow>
+    <div class="navbar navbar-inverse" role="navigation" />
+    <div class="navbar-header">
+        <div class="logo col-sm-3 col-xs-3">
+            <h1>
+            </h1>
+            <asp:Image ID="Imagunwomen" runat="server" ImageUrl="~/images/unwomen-logo.png" />
+        </div>
+    </div>
+    <div class="sitename col-sm-6 col-xs-8">
+        Contact Database</div>
+    <div class="admin-icons pull-right">
+        <i class="fa fa-user"></i>&nbsp;&nbsp; Welcome,
+        <asp:Label runat="server" Font-Size="13px" ID="lbl_usersign"></asp:Label>
+        <br />
+        <a id="A1" href="#changeAnchor" runat="server"></a>
+        <asp:HyperLink ID="hlcngpaswrd" runat="server" data-toggle="modal" NavigateUrl="#changeAnchor"
+            data-target="#Changepassword" Style="float: right; color: #E4701E;">Change Password</asp:HyperLink><br />
+        <asp:HyperLink ID="hllogout" runat="server" NavigateUrl="~/login.aspx" Style="float: right;
+            color: #E4701E;">Logout</asp:HyperLink>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span><span
+            class="icon-bar"></span><span class="icon-bar"></span>
+    </button>
+    </div>
+    <div class="template-page-wrapper">
+        <div class="navbar-collapse collapse unwomen-sidebar">
+            <div class="heading-bg">
+                <p class="contact-heading">
+                    Search Contacts</p>
+            </div>
+            <br />
+            <div class="unwomen-sidebar-menu">
+                <span class="icons">
+                    <%-- <asp:ImageButton ID="ImageButton2"   runat="server" ImageUrl="~/images/mysearch.png"
+                        Width="50" />--%>
+                    <asp:HyperLink ID="ImageButton2" Width="50px" ImageUrl="~/images/mysearch.png" NavigateUrl="~/Pages/MySearch.aspx"
+                        Text="" runat="server" />
+                </span><span class="icons">
+                    <%--  <asp:ImageButton ID="ImageButton3" runat="server"  Width="50px" ImageUrl="~/images/save.png" />--%>
+                    <%--<asp:HyperLink ID="ImageButton3" ImageUrl="~/images/save.png" Width="50px" Text=""
+                        runat="server"  />--%>
+                    <asp:ImageButton ID="ImageButton3" runat="server"   Width="50px" ImageUrl="~/images/save.png"
+                        OnClientClick="return btn_save_click();" />
+                </span><span class="icons" style=" text-decoration: none;">
+                    <asp:ImageButton ID="ImageButton1" runat="server" Width="50px" ImageUrl="~/images/search.png"
+                        OnClick="btn_Search" />
+                </span><span class="icons ">
+                    <asp:ImageButton ID="ImageButton4" runat="server" ImageUrl="~/images/reset.png" Width="50px"
+                        OnClick="resetSelection" OnClientClick="return removeSelection()" />
+                </span>
+            </div>
+            <br />
+            <div class="col-sm-12">
+                <asp:Label ID="Lblname" runat="server"></asp:Label>
+                <label style="padding-top: 10px;">
+                    Name
+                </label>
+                <asp:TextBox ID="txtName" runat="server" CssClass="form-control"></asp:TextBox>
+            </div>
+            <asp:UpdatePanel ID="updatepanel1" runat="server">
+                <ContentTemplate>
+                    <div class="col-sm-12">
+                        <label style="padding-top: 10px;">
+                            Organization
+                        </label>
+                        <%--<div class="input-group">
+                            <asp:TextBox ID="Txtorg" runat="server" Style="background-image: ~/images/1461672962_empty_filter.png"
+                                AutoPostBack="true" OnTextChanged="Txtorg_TextChanged" CssClass="form-control"></asp:TextBox><div
+                                    class="input-group-addon" style="border: 1px solid #e4701e;">
+                                    <img src="../images/imagessearch.png" alt="" width="18" /></div>
+                        </div>--%>
+                        <div class="input-group">
+                            <asp:TextBox ID="Txtorg" runat="server" AutoPostBack="true" CssClass="form-control"
+                                Style="border-right: none; -moz-border-right: none; border-left: 1px solid #e4701e;
+                                border-top: 1px solid #e4701e; border-bottom: 1px solid #e4701e; box-shadow: none;"></asp:TextBox><div
+                                    class="input-group-addon" style="border-left: none; -moz-border-left: none; border-right: 1px solid #e4701e;
+                                    border-top: 1px solid #e4701e; border-bottom: 1px solid #e4701e;">
+                                    <asp:ImageButton ID="FilterOrg" ToolTip="Filter" runat="server" ImageUrl="~/images/ContactDB_IconFilter.png"
+                                        OnClick="Txtorg_TextChanged" alt="" Width="18" />
+                                </div>
+                        </div>
+                        <ul class="criteria-scroll ">
+                            <asp:CheckBox ID="CheckBox2" runat="server" Text="All" onclick="checka(this);" />
+                            <br />
+                            <asp:CheckBoxList runat="server" Width="450px" CssClass="faceoption" AutoPostBack="true"
+                                ID="chkboxListOrg">
+                            </asp:CheckBoxList>
+                        </ul>
+                    </div>
+                </ContentTemplate>
+            </asp:UpdatePanel>
+            <asp:UpdatePanel ID="updatepanel2" runat="server">
+                <ContentTemplate>
+                    <div class="col-sm-12">
+                        <label>
+                            Category
+                        </label>
+                        <%--                        <div class="input-group">
+                            <asp:TextBox ID="Txtcategory" runat="server" AutoPostBack="true" OnTextChanged="Txtcat_TextChanged"
+                                CssClass="form-control"></asp:TextBox><div class="input-group-addon" style="border: 1px solid #e4701e;">
+                                    <img src="../images/1461672962_empty_filter.png" width="18" /></div>
+                        </div>--%>
+                        <div class="input-group">
+                            <asp:TextBox ID="Txtcategory" runat="server" AutoPostBack="true" CssClass="form-control"
+                                Style="border-right: none; -moz-border-right: none; border-left: 1px solid #e4701e;
+                                border-top: 1px solid #e4701e; border-bottom: 1px solid #e4701e; box-shadow: none;"></asp:TextBox><div
+                                    class="input-group-addon" style="border-left: none; -moz-border-left: none; border-right: 1px solid #e4701e;
+                                    border-top: 1px solid #e4701e; border-bottom: 1px solid #e4701e;">
+                                    <asp:ImageButton ID="FilterCat"  ToolTip="Filter" runat="server" ImageUrl="~/images/ContactDB_IconFilter.png"
+                                        OnClick="Txtcat_TextChanged" alt="" Width="18" />
+                                </div>
+                        </div>
+                        <ul class="criteria-scroll " id="brand">
+                            <asp:CheckBox ID="CheckBox1" runat="server" Text="All" onclick="checkAll(this);" />
+                            <br />
+                            <asp:CheckBoxList Width="200px" runat="server" AutoPostBack="true" ID="chkboxListCat">
+                            </asp:CheckBoxList>
+                        </ul>
+                    </div>
+                </ContentTemplate>
+            </asp:UpdatePanel>
+            <asp:UpdatePanel ID="updatepanel3" runat="server">
+                <ContentTemplate>
+                    <div class="col-sm-12">
+                        <label>
+                            Country
+                        </label>
+                        <%--  <div class="input-group">
+                            <asp:TextBox ID="tbsbc" runat="server" class="form-control" OnTextChanged="Txtcountry_TextChanged"
+                                AutoPostBack="true" placeholder="Search by Country"></asp:TextBox><div class="input-group-addon"
+                                    style="border: 1px solid #e4701e;">
+                                    <img src="../images/1461672962_empty_filter.png" width="18" /></div>
+                        </div>--%>
+                        <div class="input-group">
+                            <asp:TextBox ID="tbsbc" runat="server" class="form-control" AutoPostBack="true" placeholder="Search by Country"
+                                Style="border-right: none; -moz-border-right: none; border-left: 1px solid #e4701e;
+                                border-top: 1px solid #e4701e; border-bottom: 1px solid #e4701e; box-shadow: none;"></asp:TextBox><div
+                                    class="input-group-addon" style="border-left: none; -moz-border-left: none; border-right: 1px solid #e4701e;
+                                    border-top: 1px solid #e4701e; border-bottom: 1px solid #e4701e;">
+                                    <asp:ImageButton ID="FilterCtry"  ToolTip="Filter" runat="server" ImageUrl="~/images/ContactDB_IconFilter.png"
+                                        OnClick="Txtcountry_TextChanged" alt="" Width="18" />
+                                </div>
+                        </div>
+                        <ul class="criteria-scroll " id="brand">
+                            <asp:CheckBox ID="CheckBox3" runat="server" Text="All" onclick="checkal(this);" />
+                            <br />
+                            <li>
+                                <asp:CheckBoxList Width="350px" runat="server" AutoPostBack="true" OnSelectedIndexChanged="chkboxListCountry_SelectedIndexChanged"
+                                    ID="chkboxListCountry">
+                                </asp:CheckBoxList>
+                        </ul>
+                    </div>
+                </ContentTemplate>
+            </asp:UpdatePanel>
+            <asp:UpdatePanel ID="updateState" runat="server">
+                <ContentTemplate>
+                    <asp:Panel class="col-sm-12" runat="server" ID="divState" Visible="false">
+                        <label>
+                            State (India only)</label>
+                             <div class="input-group">
+                        <asp:TextBox ID="tb_sbc1" runat="server" style="border-right:none ; box-shadow: none;" class="form-control" autocomplete="off"
+                            AutoPostBack="true" OnTextChanged="tb_sbc1_TextChanged" placeholder="Search by State"></asp:TextBox>
+                            <div
+                                    class="input-group-addon" style="border-left: none; -moz-border-left: none; border-right: 1px solid #e4701e;
+                                    border-top: 1px solid #e4701e; border-bottom: 1px solid #e4701e;">
+                                    <asp:ImageButton ID="filterstate"  ToolTip="Filter" runat="server" ImageUrl="~/images/ContactDB_IconFilter.png"
+                                        OnClick="Txtstate_TextChanged" alt="" Width="18" />
+                                </div>
+                            </div>
+                        <ul class="criteria-scroll" id="brand">
+                            <li>
+                                <asp:CheckBox ID="CheckBox4" runat="server" Text="All" onclick="checkala(this);" />
+                                <br />
+                                <asp:CheckBoxList Width="200px" runat="server" CssClass="facetoption" ID="chkboxListState">
+                                </asp:CheckBoxList>
+                        </ul>
+                    </asp:Panel>
+                </ContentTemplate>
+            </asp:UpdatePanel>
+            <div class="col-sm-12">
+                <label>
+                    City
+                </label>
+                <asp:TextBox ID="txt_City" runat="server" class="form-control"></asp:TextBox>
+                <asp:CheckBoxList Width="200px" runat="server" CssClass="facetoption" ID="checkboxlist3"
+                    AutoPostBack="true">
+                </asp:CheckBoxList>
+            </div>
+            <div class="col-sm-12">
+                <label>
+                    Pincode
+                </label>
+                <asp:TextBox ID="txt_Pincode" runat="server" onkeypress="return onlyNumbers(event)" CssClass="form-control"></asp:TextBox>
+            </div>
+            <div class="col-sm-12">
+                <label>
+                    Tags
+                </label>
+                <asp:TextBox ID="txt_Tags" runat="server" CssClass="form-control" placeholder="Specify multiple separated by comma"></asp:TextBox>
+            </div>
+            <div class="clearfix">
+            </div>
+            <br />
+            <div class="unwomen-sidebar-menu">
+                <span class="icons">
+                    <asp:HyperLink ID="HyperLinkMSF" Width="50px" ImageUrl="~/images/mysearch.png" NavigateUrl="~/Pages/MySearch.aspx"
+                        Text="" runat="server" />
+                </span><span class="icons">
+                    <asp:ImageButton ID="ImageButton5" runat="server" Width="50px" ImageUrl="~/images/save.png"
+                        OnClientClick="return btn_save_click();" /></span> <span class="icons"><a href="#">
+                            <asp:ImageButton ID="hyperlinkserc" Width="50px" OnClick="btn_Search" ImageUrl="~/images/search.png"
+                                Text="" runat="server" />
+                            <%--  <img src="images/search.png" width="50" />--%>
+                        </a></span><span class="icons"><a href="#">
+                            <asp:ImageButton ID="hyperlinkres" Width="50px" OnClientClick="return removeSelection()"
+                                ImageUrl="~/images/reset.png" Text="" runat="server" />
+                            <%-- <img src="images/reset.png" width="50" />--%>
+                        </a></span>
+            </div>
+        </div>
+        <!--/.navbar-collapse -->
+        <div class="unwomen-content-wrapper">
+            <div class="unwomen-content">
+                <div class="heading-bg">
+                    <p class="contact-heading">
+                        My Dashboard</p>
+                </div>
+                <div class="main-content">
+                    <br />
+                    <div class="unwomen-top-menu pull-right">
+                        <span class="icons" id="AdminIcon" runat="server"><a href="#">
+                            <asp:ImageButton ID="imgadmin" runat="server" Width="60px" OnClick="admin_click"
+                                ImageUrl="~/images/admin.png" />
+                        </a></span><span class="icons" id="AddNew" runat="server"><a href="../Pages/AddUpdateContact.aspx"
+                            data-toggle="modal" data-target="#myModal" id="button">
+                            <asp:ImageButton ID="imgaddnew" runat="server" Width="60px" ImageUrl="~/images/add-new.png" />
+                        </a></span><span class="icons"><a href="#">
+                            <asp:ImageButton ID="imgexport" runat="server" Width="60px" OnClick="btn_excel_click"
+                                ImageUrl="~/images/export.png" /></a></span>
+                        <%--<span class="icons"><a href="#" data-toggle="modal" Width="60px" data-target="#share-model"><img src="images/share-contact.png"/> </a> </span> --%>
+                        <span class="icons" id="shareContact" runat="server"><a id="hrfShareExport" style="display: none;"
+                            href="#" data-toggle="modal" data-target="#share-model"></a>
+                            <asp:ImageButton ID="ImageShareExport" runat="server" OnClick="ImageShareExport_click"
+                                ImageUrl="~/images/share-contact.png" />
+                        </span><span class="icons"><a href="#">
+                            <asp:ImageButton ID="imgprint" runat="server" Width="75px" ImageUrl="~/images/print-label.png"  />
+                            <%--  <img src="images/print-label.png" width="75" />--%>
+                        </a></span>
+                        <%--  <span class="icons"><a href="#">
+                            <asp:ImageButton ID="imgurl" runat="server" Width="75px" ImageUrl="~/images/send-mail.png" />
+                         </a></span>
+                        --%>
+                        <span class="icons" id="SendMail" runat="server"><a id="hrfSendMail" style="display: none;"
+                            href="#" data-toggle="modal" data-target="#send-email-model"></a>
+                            <asp:ImageButton ID="ImageSendMail" runat="server" OnClick="ImageSendMail_click"
+                                ImageUrl="~/images/send-mail.png" />
+                        </span><span class="icons">
+                            <asp:HyperLink ID="hyperlinkDynamicRpt" Width="75px" ImageUrl="~/images/custom-list.png"
+                                NavigateUrl="~/Pages/DynamicReporting.aspx" Text="" runat="server" />
+                        </span><span class="icons">
+                            <%--<asp:HyperLink ID="hyperlinkHelp" Width="75px" ImageUrl="~/Pages/images/help-icon.png"
+                                Text="" runat="server" />--%>
+                            <a href="../Pages/pdf/UNWomen_ContactDatabase_UserManual.pdf" target="_blank">
+                                <img src="../Pages/images/help-icon.png" />
+                            </a></span>
+                    </div>
+                    <div class="clearfix">
+                    </div>
+                    <br />
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="x_panel">
+                                    <div class="x_content">
+                                        <div class="well">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <ul class="stats-overview">
+                                                    <li>
+                                                        <div class="batch">
+                                                            <div class="radio">
+                                                                <label>
+                                                                    View :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                                                <label>
+                                                                    <asp:RadioButton Checked="true" ID="tableView" GroupName="View" OnCheckedChanged="view_checkedchanged"
+                                                                        runat="server" AutoPostBack="True" />Table
+                                                                </label>
+                                                                &nbsp;&nbsp;
+                                                                <label>
+                                                                    <asp:RadioButton ID="cardView" GroupName="View" OnCheckedChanged="view_checkedchanged"
+                                                                        AutoPostBack="true" runat="server" />Card
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li style="border-right: none !important;">
+                                                        <asp:DropDownList ID="ddl_sort" runat="server" CssClass="form-control" OnSelectedIndexChanged="OnSelectedIndexChanged"
+                                                            AutoPostBack="true">
+                                                            <asp:ListItem Text="Sort by" Value="0"></asp:ListItem>
+                                                            <asp:ListItem Text="First Name" Value="ContactFirstName"></asp:ListItem>
+                                                            <asp:ListItem Text="Middle Name" Value="ContactMiddleName"></asp:ListItem>
+                                                            <asp:ListItem Text="Last Name" Value="ContactLastName"></asp:ListItem>
+                                                            <asp:ListItem Text="Designation" Value="ContactDesignation"></asp:ListItem>
+                                                            <asp:ListItem Text="Organization" Value="ORG.OrganisationName"></asp:ListItem>
+                                                            <asp:ListItem Text="Country" Value="ContactCountryId"></asp:ListItem>
+                                                            <asp:ListItem Text="State" Value="ContactStateId"></asp:ListItem>
+                                                            <asp:ListItem Text="City" Value="ContactCityName"></asp:ListItem>
+                                                            <asp:ListItem Text="Pin Code" Value="ContactPinCode"></asp:ListItem>
+                                                            <asp:ListItem Text="Email" Value="ContactEmailId"></asp:ListItem>
+                                                            <asp:ListItem Text="Skype Id" Value="ContactSkypeId"></asp:ListItem>
+                                                            <asp:ListItem Text="Category" Value="ContactCategories"></asp:ListItem>
+                                                           
+                                                            <asp:ListItem Text="Tag" Value="ContactTags">
+                                                    
+                                                            </asp:ListItem>
+                                                        </asp:DropDownList>
+                                                        <%--<select class="form-control">
+                                                            <option value="0">Sort by</option>
+                                                            <option value="1">First Name</option>
+                                                            <option value="2">Middle Name</option>
+                                                            <option value="3">Last Name</option>
+                                                            <option value="4">Designation</option>
+                                                            <option value="5">Organization</option>
+                                                            <option value="6">Country</option>
+                                                            <option value="7">State</option>
+                                                            <option value="8">City</option>
+                                                            <option value="9">Pin Code</option>
+                                                            <option value="10">Email</option>
+                                                            <option value="11">Skype Id</option>
+                                                            <option value="12">Category</option>
+                                                            <option value="13">Tag</option>
+                                                        </select>--%>
+                                                    </li>
+                                                    <li style="border-right: none !important; margin-bottom: -10px;">
+                                                        <div style="margin-top: 20px">
+                                                            <div>
+                                                                <asp:RadioButtonList runat="server" ID="btn_asc" AutoPostBack="true" Width="200px"
+                                                                    RepeatDirection="Horizontal" RepeatColumns="2" OnSelectedIndexChanged="OnSelectedIndexChanged">
+                                                                    <asp:ListItem Text="ASC" Value="asc" Selected="True">
+                                                                    </asp:ListItem>
+                                                                    <asp:ListItem Text="DESC" Value="desc">
+                                                                    </asp:ListItem>
+                                                                </asp:RadioButtonList>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li style="border-right: none !important; margin-bottom: -10px; padding: 0px;">
+                                                        <div class="batch">
+                                                            <%--<a href="Default.aspx">
+                                                                <img width="36" src="../Pages/images/reset-sort.png" />
+                                                            </a>--%>
+                                                            <span class="icons ">
+                                                                <asp:ImageButton ID="resetsort" runat="server" ImageUrl="~/images/reset-sort.png"
+                                                                    Width="45px" OnClick="resetSorting" />
+                                                            </span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix">
+                                        </div>
+                                        <br />
+                                        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                                        </asp:ContentPlaceHolder>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="share-model" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="share-model"
+            aria-hidden="true">
+            <div class="modal-dialog" style="width: 800px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="javascript:closePopupShareContact()">
+                            ×</button>
+                        <h4 class="modal-title" id="share-model">
+                            Share Contacts</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="antoform" class="form-horizontal calender" role="form">
+                        <div class="col-sm-12">
+                            <%--<label id>
+                                250 Contact(s) Selected</label>--%>
+                            <asp:Label ID="countShareContacts" Text="" runat="server"></asp:Label>
+                        </div>
+                        <div class="col-sm-12">
+                            <label>
+                                Select your colleagues to share the contacts with :</label>
+                            <asp:UpdatePanel ID="UpdatePanelShareContacts" runat="server">
+                                <ContentTemplate>
+                                    <div class="">
+                                        
+                                        <%--<div class="input-group" style="border-left: none; -moz-border-left: none; border-right: 1px solid #e4701e;
+                                            border-top: 1px solid #e4701e; border-bottom: 1px solid #e4701e;">
+                                            <asp:ImageButton ID="ImageButton6" runat="server" ImageUrl="~/images/ContactDB_IconFilter.png"
+                                                OnClick="Txtorg_TextChanged" alt="" Width="18" />
+                                        </div>--%>
+                                         <div class="input-group">
+                            <asp:TextBox ID="txtshare" runat="server" AutoPostBack="true" CssClass="form-control"
+                                Style="border-right: none; -moz-border-right: none; border-left: 1px solid #e4701e;
+                                border-top: 1px solid #e4701e; border-bottom: 1px solid #e4701e; box-shadow: none;"></asp:TextBox><div
+                                    class="input-group-addon" style="border-left: none; -moz-border-left: none; border-right: 1px solid #e4701e;
+                                    border-top: 1px solid #e4701e; border-bottom: 1px solid #e4701e;">
+                                    <asp:ImageButton ID="sharefilter" runat="server" ImageUrl="~/images/ContactDB_IconFilter.png"
+                                      OnClick="Txtshare_TextChanged" alt="" Width="18" />
+                                </div>
+                        </div>
+                                        <ul class="criteria-scroll ">
+                                            <asp:CheckBox ID="CheckBoxAllShareContact" runat="server" Text="All" onclick="checkAllShareContacts(this);" />
+                                            <br />
+                                            <asp:CheckBoxList runat="server" Width="350px" CssClass="faceoption" AutoPostBack="true"
+                                                ID="CheckBoxListShareContact">
+                                            </asp:CheckBoxList>
+                                        </ul>
+                                    </div>
+                                </ContentTemplate>
+                            </asp:UpdatePanel>
+                        </div>
+                        <div class="clearfix">
+                        </div>
+                        <div class="modal-footer">
+                            <%--<button type="button" class="btn btn-primary antosubmit">Share</button>--%>
+                            <asp:Button runat="server" ID="Share" Text="Share" Class="btn btn-primary antosubmit"
+                                OnClick="BtnSendShareContacts_click" />
+                            <%-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+                                Cancel</button>--%>
+                            <asp:Button class="btn btn-primary" data-dismiss="modal" aria-hidden="true" runat="server"
+                                ID="Cancel" Text="Cancel" OnClientClick="return closePopupShareContact();" />
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="send-email-model" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="share-model"
+            aria-hidden="true">
+            <div class="modal-dialog" style="width: 800px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            ×</button>
+                        <h4 class="modal-title" id="H1">
+                            Send Email</h4>
+                    </div>
+                    <div class="modal-body">
+                        <%--  <div class="col-sm-12 col-xs-12">
+                             <asp:Label ID="LabelErrorMsgSendMail" Font-Names="calibri" Font-Size="Medium" runat="server"
+                                ForeColor="Red" Text=""></asp:Label>
+                        </div>
+                        --%>
+                        <div class="col-sm-12 col-xs-12">
+                            <asp:Label ID="countSendMailContacts" Text="" runat="server"></asp:Label>
+                        </div>
+                        <div class="col-sm-12 col-xs-12">
+                            <%--<input type="checkbox">&nbsp;--%>
+                            <asp:CheckBox ID="ChkSender" runat="server" />
+                            <label>
+                                Send Email with me as the Sender</label>
+                        </div>
+                        <div class="clearfix">
+                        </div>
+                        <br />
+                        <div class="col-sm-12 col-xs-12" id="senderInfo">
+                            <label>
+                                Password for Send Mail:</label>
+                            <%--<input type="password"  class="form-control col-md-12 col-xs-12">--%>
+                            <asp:TextBox ID="txt_sender_password" CssClass="form-control col-md-12 col-xs-12"
+                                TextMode="Password" Text="Password" autocomplete="off" runat="server"></asp:TextBox>
+                        </div>
+                        <div class="col-sm-12 col-xs-12">
+                            <label>
+                                Subject:</label>
+                            <%--<input type="text"  class="form-control col-md-12 col-xs-12">--%>
+                            <asp:TextBox ID="txt_subject" CssClass="form-control col-md-12 col-xs-12" autocomplete="off"
+                                runat="server"></asp:TextBox>
+                        </div>
+                        <div class="col-sm-12 col-xs-12">
+                            <label>
+                                Message:</label>
+                            <%--<input type="text"  class="form-control col-md-12 col-xs-12 textEditor">--%>
+                            <div class="demo-containers">
+                                <div class="demo-container">
+                                    <telerik:RadEditor RenderMode="Lightweight" runat="server" ID="RadEditorPIPIP1" SkinID="Vista"
+                                        Height="400px" Width="100%">
+                                        <ImageManager ViewPaths="~/images" EnableAsyncUpload="true"></ImageManager>
+                                        <Content>
+                                        </Content>
+                                    </telerik:RadEditor>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-xs-12">
+                            <label>
+                                Attachments:</label>
+                            <div class="col-sm-12 col-xs-12">
+                                <%--<button type="button" class="btn btn-primary antosubmit">Add</button> --%>
+                                <%--    <div class="demo-container size-thin" runat="server" id="DemoContainer1">
+        <telerik:RadAsyncUpload RenderMode="Lightweight" runat="server" ID="AsyncUpload1" ChunkSize="1048576" HideFileInput="true"   />
+        <telerik:RadProgressArea RenderMode="Lightweight" runat="server" ID="RadProgressArea1" />
+    </div>--%>
+                                <div class="demo-container size-thin">
+                                    <telerik:RadAsyncUpload RenderMode="Lightweight" runat="server" ID="RadAsyncUpload1"
+                                        MultipleFileSelection="Automatic" HideFileInput="true" Localization-Select="Add" />
+                                </div>
+                                <%--<hr>
+<label>Profile.dox</label> &nbsp;&nbsp;<i class="fa fa-remove"></i>--%>
+                            </div>
+                            <%--<div class="col-sm-12 col-xs-12">
+<label>Profile.dox</label> &nbsp;&nbsp;<i class="fa fa-remove"></i>
+</div>--%>
+                        </div>
+                        <div class="clearfix">
+                        </div>
+                        <div class="modal-footer">
+                            <%--<button type="button" class="btn btn-primary antosubmit">Send</button> --%>
+                            <asp:Button runat="server" ID="BtnSendEmail" Text="Send" Class="btn btn-primary antosubmit"
+                                OnClick="BtnSendEmail_click" OnClientClick="return BtnSendEmail_Validate();" />
+                            <%-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+                                    Cancel</button>--%>
+                            <asp:Button class="btn btn-primary" data-dismiss="modal" aria-hidden="true" runat="server"
+                                ID="Button1" Text="Cancel" OnClientClick="return closePopupSendMail();" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="Changepassword" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="share-model"
+            aria-hidden="true">
+            <div class="modal-dialog" style="width: 600px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            ×</button>
+                        <h4 class="modal-title" id="H3">
+                            Change Password</h4>
+                    </div>
+                    <div class="modal-body">
+                        <%--  <div class="col-sm-12 col-xs-12">
+                             <asp:Label ID="LabelErrorMsgSendMail" Font-Names="calibri" Font-Size="Medium" runat="server"
+                                ForeColor="Red" Text=""></asp:Label>
+                        </div>
+                        --%>
+                        <div class="col-sm-12 col-xs-12">
+                            <asp:Label ID="Label3" Text="" runat="server"></asp:Label>
+                        </div>
+                        <div class="clearfix">
+                        </div>
+                        <div class="form-group ps">
+                            <%--<p class="password-strength">
+                                Password (Minimum 8 characters with at least one symbol and one number)</p>--%>
+                            <div id="progress-bar">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-xs-12" id="Div3">
+                            <label>
+                                New Password (Minimum 8 characters with at least one capital letter, one symbol and one number)</label>
+                            <%--<input type="password"  class="form-control col-md-12 col-xs-12">--%>
+                            <asp:TextBox ID="txtnewpassword" MaxLength="40" placeholder="New Password" CssClass="form-control col-md-12 col-xs-12"
+                                TextMode="Password" Text="Password" autocomplete="off" runat="server"></asp:TextBox>
+                        </div>
+                        <div class="col-sm-12 col-xs-12">
+                            <label>
+                                Confirm Password</label>
+                            <%--<input type="text"  class="form-control col-md-12 col-xs-12">--%>
+                            <asp:TextBox ID="txtcnfrmpassword" MaxLength="40" TextMode="Password" placeholder="Confirm Password"
+                                CssClass="form-control col-md-12 col-xs-12" autocomplete="off" runat="server"></asp:TextBox>
+                        </div>
+                        <div class="col-sm-12 col-xs-12">
+                            <label id="forconpass" style="visibility: hidden;">
+                                Check</label>
+                        </div>
+                        <div class="clearfix">
+                        </div>
+                        <div class="modal-footer">
+                            <%--<button type="button" class="btn btn-primary antosubmit">Send</button> --%>
+                            <asp:Button runat="server" ID="btnchngepassword" Text="Change Password" Class="btn btn-primary antosubmit"
+                                OnClick="btnchngepassword_Click" />
+                            <%-- <button type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+                                    Cancel</button>--%>
+                            <asp:Button class="btn btn-primary" data-dismiss="modal" aria-hidden="true" runat="server"
+                                ID="btncancel" Text="Cancel" OnClientClick="return closePopupSendMail();" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="unwomen-footer">
+<div class="unwomen-copyright">
+<p>Copyright &copy; UN Women</p>
+</div>
+</footer>
+    <script src="../js/jquery.min.js" type="text/javascript"></script>
+    <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../js/jquery-te-1.4.0.min.js" type="text/javascript"></script>
+    <script src="../js/password-score.js" type="text/javascript"></script>
+    <script src="../js/password-score-options.js" type="text/javascript"></script>
+    <script src="../js/bootstrap-strength-meter.js" type="text/javascript"></script>
+    </form>
+</body>
+</html>
+<script type="text/javascript">
+    function removeSelection() {
+
+        var checkBoxList = document.getElementById("<%=chkboxListOrg.ClientID %>");
+        var checkBoxList1 = document.getElementById("<%=chkboxListCat.ClientID %>");
+        var checkBoxList2 = document.getElementById("<%=chkboxListCountry.ClientID %>");
+        var checkBoxList3 = document.getElementById("<%=chkboxListState.ClientID %>");
+
+        if (checkBoxList != null) {
+            var chkCheckBoxListItems = checkBoxList.getElementsByTagName("input");
+            //alert("hi");
+            for (var intCounter = 0; intCounter <= chkCheckBoxListItems.length - 1; ) {
+                chkCheckBoxListItems[intCounter].checked = false;
+                //    sddsdas; // Item is selected
+                // else
+                //     effdafafdsf; //Item is not selected by user
+                intCounter = intCounter + 1;
+            }
+        }
+        if (checkBoxList1 != null) {
+            var chkCheckBoxListItems = checkBoxList1.getElementsByTagName("input");
+            //alert("hi");
+            for (var intCounter = 0; intCounter <= chkCheckBoxListItems.length - 1; ) {
+                chkCheckBoxListItems[intCounter].checked = false;
+                //    sddsdas; // Item is selected
+                // else
+                //     effdafafdsf; //Item is not selected by user
+                intCounter = intCounter + 1;
+            }
+        }
+        if (checkBoxList2 != null) {
+            var chkCheckBoxListItems = checkBoxList2.getElementsByTagName("input");
+            //alert("hi");
+            for (var intCounter = 0; intCounter <= chkCheckBoxListItems.length - 1; ) {
+                chkCheckBoxListItems[intCounter].checked = false;
+                //    sddsdas; // Item is selected
+                // else
+                //     effdafafdsf; //Item is not selected by user
+                intCounter = intCounter + 1;
+            }
+        }
+        if (checkBoxList3 != null) {
+            var chkCheckBoxListItems = checkBoxList3.getElementsByTagName("input");
+            //alert("hi");
+            for (var intCounter = 0; intCounter <= chkCheckBoxListItems.length - 1; ) {
+                chkCheckBoxListItems[intCounter].checked = false;
+                //    sddsdas; // Item is selected
+                // else
+                //     effdafafdsf; //Item is not selected by user
+                intCounter = intCounter + 1;
+            }
+        }
+
+
+        document.getElementById('txtName').value = "";
+        document.getElementById('txt_City').value = "";
+        document.getElementById('txt_Pincode').value = "";
+        document.getElementById('txt_Tags').value = "";
+        otherContactGrid.Rebind();
+        return false;
+
+    }
+      
+</script>
+<script type="text/javascript">
+
+    function checkAll(obj1) {
+        var checkboxCollection = document.getElementById('<%=chkboxListCat.ClientID %>').getElementsByTagName('input');
+
+        for (var i = 0; i < checkboxCollection.length; i++) {
+            if (checkboxCollection[i].type.toString().toLowerCase() == "checkbox") {
+                checkboxCollection[i].checked = obj1.checked;
+            }
+        }
+    }
+
+    function checka(obj1) {
+        var checkboxCollection = document.getElementById('<%=chkboxListOrg.ClientID %>').getElementsByTagName('input');
+
+        for (var i = 0; i < checkboxCollection.length; i++) {
+            if (checkboxCollection[i].type.toString().toLowerCase() == "checkbox") {
+                checkboxCollection[i].checked = obj1.checked;
+            }
+        }
+    }
+
+    function checkal(obj1) {
+        var checkboxCollection = document.getElementById('<%=chkboxListCountry.ClientID %>').getElementsByTagName('input');
+        for (var i = 0; i < checkboxCollection.length; i++) {
+            if (checkboxCollection[i].type.toString().toLowerCase() == "checkbox") {
+                checkboxCollection[i].checked = obj1.checked;
+            }
+        }
+    }
+
+    function checkala(obj1) {
+        var checkboxCollection = document.getElementById('<%=chkboxListState.ClientID %>').getElementsByTagName('input');
+
+        for (var i = 0; i < checkboxCollection.length; i++) {
+            if (checkboxCollection[i].type.toString().toLowerCase() == "checkbox") {
+                checkboxCollection[i].checked = obj1.checked;
+            }
+        }
+    }
+    function checkAllShareContacts(obj1) {
+        var checkboxCollection = document.getElementById('<%=CheckBoxListShareContact.ClientID %>').getElementsByTagName('input');
+
+        for (var i = 0; i < checkboxCollection.length; i++) {
+            if (checkboxCollection[i].type.toString().toLowerCase() == "checkbox") {
+                checkboxCollection[i].checked = obj1.checked;
+            }
+        }
+    }
+
+    function checkTotalContacts(obj1) {
+        alert("Hello")
+
+    }
+
+
+    function closePopupShareContact() {
+
+        var checkBoxList = document.getElementById("<%=CheckBoxListShareContact.ClientID %>");
+        if (checkBoxList != null) {
+            var chkCheckBoxListItems = checkBoxList.getElementsByTagName("input");
+            //alert("hi");
+            for (var intCounter = 0; intCounter <= chkCheckBoxListItems.length - 1; ) {
+                chkCheckBoxListItems[intCounter].checked = false;
+                intCounter = intCounter + 1;
+            }
+        }
+
+        document.getElementById("CheckBoxAllShareContact").checked = false;
+        return false;
+    }
+
+
+    function closePopupSendMail() {
+
+        var editor = $find("<%=RadEditorPIPIP1.ClientID%>");
+        var editorText = editor.get_text(); //get the editor content as plain text    
+         
+       
+
+        document.getElementById("ChkSender").checked = false;
+        document.getElementById('txt_subject').value = "";
+        document.getElementById('txt_sender_password').value = "";
+        editor.set_html(""); //reset the content
+
+
+
+
+        return false;
+    }
+
+
+
+    $(document).ready(function () {
+
+        $("#senderInfo").hide();
+        $("#ChkSender").click(function () {
+            if ($(this).is(":checked")) {
+                $("#senderInfo").show();
+            } else {
+                $("#senderInfo").hide();
+            }
+        });
+
+
+    });
+
+   
+
+   
+</script>

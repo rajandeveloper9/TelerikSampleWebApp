@@ -1,0 +1,238 @@
+﻿@charset "utf-8";
+/* CSS Document */
+a {
+    color: #ee742c;
+    text-decoration: none;
+}
+.wrapper {
+	min-height:100%;
+	overflow: hidden;
+	man-width:320px;
+}
+.main-header {
+	background:#ee742c;
+	height:75px;
+	min-width:320px;
+}
+.main-header h1 {
+	margin-top: 15px;
+	margin-bottom:0px;
+	color:#FFF;
+	font-size: 32px;
+	font-family:Helvetica, Arial, sans-serif;
+text-shadow: 4px 4px 4px rgba(64, 82, 70, 1);
+}
+.main-header p {
+	color:#FFF;
+	margin-bottom: 5px;
+	font-family:Helvetica, Arial, sans-serif;
+}
+.content-wrapper {
+	background:#efefef;
+}
+.ps{ width:95%;}
+.input-group .form-control{box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset; width:95%;}
+
+
+.input-group-addon {
+	background:#fff;
+	top:0;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+}
+.form-control {
+	border-left:none;
+}
+.input-group {
+/*	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+padding-bottom: 15px;*/	
+}
+#sign-up h1 {
+	font-size:18px;
+	font-family:Helvetica, Arial, sans-serif;
+}
+#sign-up.form-control {
+	height:0px;
+}
+#sign-up form{ margin-top: 3%;}
+#sign-up .box-title{  margin-top: 10px;}
+#sign-up{
+ 	padding: 0px 5% 10px;
+	width: 48%;
+	min-width:350px;
+	margin:10px auto;	
+	background: rgb(247, 247, 247) url(../images/bg-form.png) repeat;
+	border: 1px solid rgba(147, 184, 189, 0.8);
+	border-radius: 5px;
+	box-shadow: 0 1px 1px rgba(105, 108, 109, 0.7), 0 0 8px 5px rgba(208, 223, 226, 0.4) inset;
+	border-top:2px solid #3c8dbc;
+}
+
+#login {
+ margin: 10px 0 5px;
+	padding: 0px 6% 10px;
+	width: 65%;
+	float:right;
+	background: rgb(247, 247, 247) url(../images/bg-form.png) repeat;
+	border: 1px solid rgba(147, 184, 189, 0.8);
+	border-radius: 5px;
+	box-shadow: 0 1px 1px rgba(105, 108, 109, 0.7), 0 0 8px 5px rgba(208, 223, 226, 0.4) inset;
+}
+#login h1 {
+	font-size:18px;
+	font-family:Helvetica, Arial, sans-serif;
+}
+#login.form-control {
+	height:40px;
+}
+
+.login.button > a input {
+	background: #ee742c none repeat scroll 0 0;
+	color: #fff;
+	padding: 5px;
+	width: 40%;
+	text-align:center;
+}
+
+.login.button > a input:hover {
+		background: #0081B8 none repeat scroll 0 0;
+}
+
+.signup.button > input {
+	background: #ee742c none repeat scroll 0 0;
+	color: #fff;
+	padding: 10px;
+	width: 40%;
+	text-align:center;
+}
+
+.signup.button > input:hover {
+		background: #0081B8 none repeat scroll 0 0;
+}
+.ribbon {
+	font-size: 16px !important;
+	width: 65%;
+	right:12px;
+	position: absolute;
+	background: #ee742c;
+	color: #fff;
+	top:5px;
+	padding: 1em 2em;
+}
+.ribbon:before {
+	content: "";
+	position: absolute;
+	display: block;
+	bottom: -1em;
+	z-index: -1;
+}
+.ribbon:before {
+	left: -2em;
+	border-right-width: 1.5em;
+	border-left-color: transparent;
+}
+.ribbon .ribbon-content:before {
+	content: "";
+	position: absolute;
+	display: block;
+	border-style: solid;
+	border-color: #ee742c transparent transparent transparent;
+	bottom: -1em;
+}
+.ribbon .ribbon-content:before {
+	left: 0;
+	border-width: 1em 0 0 1em;
+}
+
+#login form {
+	margin-top: 30%;
+}
+.main-footer {
+	background:#ee742c;
+	padding:10px 0;
+	padding: 10px 0;
+	width: 100%;
+	height:35px;
+}
+.main-footer p {
+	color:#FFF;
+	font-family:Helvetica, Arial, sans-serif;
+	margin: 0;
+}
+ 
+.itsupport-content{
+		float: right;
+    font-size: 12px;
+    padding:5px;
+    width: 65%;
+}
+.separator {
+    border-left: 1px solid #ccc;
+    display: block;
+    float: left;
+    height: 350px;
+    margin: 20px 0;
+}
+.captcha button{border:none;}
+.captcha-icon{ background:url(../images/captcha_reload.png) no-repeat; height:50px; width:50px; background-size:40px 40px;}
+.captcha .img-responsive{display:inline;width: 85%;}
+.password-strength{font-size:12px;}
+.devtoAsterix {
+    color: #bf0000;
+    float: right;
+    font-size: 18px;
+    margin-left: 2px;
+    margin-top: -5px;
+}
+@media screen and (min-width:310px) and (max-width:768px) {
+.separator{display:none;}
+#login {
+width:100% !important;
+}
+.ribbon {
+width:98% !important;
+}
+#login form {
+margin-top: 100px !important;
+} 
+.itsupport-content{width:100%;}
+}
+@media screen and (min-width:768px) and (max-width:990px) {
+	#login form {
+    margin-top: 40%;
+}
+}
+
+ #participant-regi h1 {
+	font-size:18px;
+	font-family:Helvetica, Arial, sans-serif;
+}
+ 
+#participant-regi form{ margin-top: 3%;}
+#participant-regi .box-title{  margin-top: 10px;}
+#participant-regi{
+ 	padding: 0px 5% 10px;
+	width: 85%;
+	min-width:350px;
+	margin:10px auto;	
+	background: rgb(247, 247, 247) url(../images/bg-form.png) repeat;
+	border: 1px solid rgba(147, 184, 189, 0.8);
+	border-radius: 5px;
+	box-shadow: 0 1px 1px rgba(105, 108, 109, 0.7), 0 0 8px 5px rgba(208, 223, 226, 0.4) inset;
+	border-top:2px solid #3c8dbc;
+}
+.margin-top-20{margin-top:20px;}
+.participant-regi.button > input {
+    background: #ee742c none repeat scroll 0 0;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    width: 15%;
+}
+.meeting-title {
+    padding: 90px;
+}
+
+.btn-primary {
+    background: #ee742c none repeat scroll 0 0;
+    margin-bottom: 5px !important;
+}
